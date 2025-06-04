@@ -1,0 +1,24 @@
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap";
+@import "tailwindcss";
+
+:root {
+  @apply bg-neutral-950 text-white;
+  @apply dark:bg-neutral-950 dark:text-white;
+
+  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.input-group {
+  @apply flex flex-col border-2 border-gray-500 rounded-lg px-6 py-4 gap-2 shadow-md w-full max-w-md bg-white/10;
+}
+
+.input {
+  @apply border-2 border-gray-500 rounded-md p-2 w-full outline-none bg-white/10;
+}

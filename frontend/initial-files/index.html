@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+        <title>Raw Dog Food Calculator v0.1</title>
+        <style>
+            .calculator {
+                padding     : 20px;
+                max-width   : 500px;
+                margin      : 0 auto;
+                font-family : Arial, sans-serif;
+            }
+
+            /* Add map container styles */
+            #map {
+                height: 400px;
+                margin: 20px 0;
+            }
+
+            input, select, button {
+                margin      : 10px 0;
+                padding     : 8px;
+                width       : 100%;
+                border      : 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            button {
+                background-color: #4CAF50;
+                color           : white;
+                border          : none;
+                cursor          : pointer;
+                font-size       : 16px;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            #result{
+                margin-top  : 20px;
+                padding     : 15px;
+                background  : #f8f9fa;
+                border-radius: 4px;
+                border      : 1px solid #dee2e6;
+            }
+
+            h1 {
+                color       : #333;
+                text-align  : center;
+            }
+
+            label {
+                display     : block;
+                margin-top  : 10px;
+                color       : #555;
+            }
+
+            /* Food suggestions styles */
+            .food-suggestions {
+                margin-top: 20px;
+                padding: 15px;
+                background: #fff;
+                border-radius: 4px;
+                border: 1px solid #e9ecef;
+            }
+
+            .component-suggestions {
+                margin-bottom: 15px;
+                padding: 10px;
+                background: #f8f9fa;
+                border-radius: 4px;
+            }
+
+            .component-suggestions h5 {
+                margin: 0 0 10px 0;
+                color: #495057;
+            }
+
+            .component-suggestions ul {
+                margin: 0;
+                padding-left: 20px;
+            }
+
+            .component-suggestions li {
+                margin: 5px 0;
+                color: #666;
+            }
+
+        </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>The Raw Dog Food Calculator</h1>
+        <!-- Add map container -->
+        <div id="map"></div>
+        <input type="number" id="dogWeight" placeholder="Enter your dog's weight">
+        <input type="number" id="percentage" placeholder="Enter food % of body weight (e.g., 2.5)" value="2.5">
+
+        <select id="method">
+            <option value ="">Select RAW food option</option>
+            <option value ="BARF">BARF</option>
+            <option value ="tradBARF">Traditional BARF</option>
+            <option value ="PMR">Prey Model Raw </option>
+            <option value ="tradPMR">Traditional Prey Model Raw</option>
+        </select>
+        <select id="mode">
+            <option value ="">Is your dog an adult or a puppy</option>
+            <option value ="Adult">Adult</option> 
+            <option value ="Puppy">Puppy</option>
+        </select>
+
+        <label for="unit">Select Unit:</label>
+        <select id="unit">
+        <option value="kg">Kilograms (kg)</option>
+        <option value="lb">Pounds (lb)</option>
+        </select> 
+
+        <button onclick = "calculateAll()" >Calculate</button>
+
+        <div id="result"> </div>
+
+    </div>
+
+    <script src="foodMode.js"></script>
+    <script src="calculator.js"></script>
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>
