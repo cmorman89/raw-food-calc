@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { methods } from "./assets/methods";
+import { DataView } from "./components/DataView";
 // import { products } from "./assets/products";
 import "./App.css";
 
@@ -86,6 +87,7 @@ function App() {
           <option value="metric">Kilograms (kg)</option>
         </select>
       </div>
+      <DataView />
     </div>
   );
 }
