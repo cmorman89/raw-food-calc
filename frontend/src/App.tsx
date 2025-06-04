@@ -36,13 +36,19 @@ function App() {
           placeholder={`Weight in ${getUnitNames()}`}
           value={formData.weight}
           onChange={handleChange}
+          className="input"
         />
       </div>
       <div className="input-group">
         <label htmlFor="age" className="text-sm">
           Your dog's age
         </label>
-        <select name="age" value={formData.age} onChange={handleChange}>
+        <select
+          name="age"
+          value={formData.age}
+          onChange={handleChange}
+          className="input"
+        >
           {getAgeNames().map((age) => (
             <option key={age} value={age.toLowerCase()}>
               {age}
@@ -54,7 +60,12 @@ function App() {
         <label htmlFor="method" className="text-sm">
           Your dog's method of feeding
         </label>
-        <select name="method" value={formData.method} onChange={handleChange}>
+        <select
+          name="method"
+          value={formData.method}
+          onChange={handleChange}
+          className="input"
+        >
           {getMethodNames().map((method) => (
             <option key={method} value={method}>
               {method}
@@ -66,7 +77,12 @@ function App() {
         <label htmlFor="unit" className="text-sm">
           Select Units:
         </label>
-        <select name="unit" value={unit} onChange={handleChange}>
+        <select
+          name="unit"
+          value={unit}
+          onChange={handleChange}
+          className="input"
+        >
           <option value="imperial">Pounds (lb)</option>
           <option value="metric">Kilograms (kg)</option>
         </select>

@@ -2,8 +2,8 @@
 @import "tailwindcss";
 
 :root {
-  @apply bg-neutral-950 text-white;
-  @apply dark:bg-neutral-950 dark:text-white;
+  @apply bg-neutral-200 text-gray-900;
+  /* @apply dark:bg-neutral-950 dark:text-white; */
 
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -16,9 +16,13 @@
 }
 
 .input-group {
-  @apply flex flex-col border-2 border-gray-500 rounded-lg px-6 py-4 gap-2 shadow-md w-full max-w-md bg-white/10;
+  @apply flex flex-col border-1 border-gray-400 rounded-lg px-6 py-4 gap-2 shadow-md w-full max-w-md bg-neutral-100;
 }
 
 .input {
-  @apply border-2 border-gray-500 rounded-md p-2 w-full outline-none bg-white/10;
+  @apply border-1 border-gray-500/50 text-sm text-gray-800 rounded-md p-2 w-full outline-none bg-gray-200/50;
+}
+
+.input-group label {
+  @apply text-sm text-gray-700;
 }
