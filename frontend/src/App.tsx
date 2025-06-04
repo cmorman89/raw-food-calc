@@ -8,9 +8,8 @@ function App() {
     weight: 0,
     method: "",
     age: "",
-    unit: "",
+    unit: "imperial",
   });
-  const [unit, setUnit] = useState("imperial");
 
   type ChangeEvent =
     | React.ChangeEvent<HTMLInputElement>
@@ -21,7 +20,7 @@ function App() {
 
   const getMethodNames = () => Object.keys(methods);
   const getAgeNames = () => ["Adult", "Puppy"];
-  const getUnitNames = () => (unit === "imperial" ? "lb" : "kg");
+  const getUnitNames = () => (formData.unit === "imperial" ? "lb" : "kg");
 
   return (
     <div className="flex flex-col gap-2 p-8 items-center">
@@ -79,7 +78,7 @@ function App() {
         </label>
         <select
           name="unit"
-          value={unit}
+          value={formData.unit}
           onChange={handleChange}
           className="input"
         >
