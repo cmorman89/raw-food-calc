@@ -4,3 +4,5 @@
 
 > [!NOTE]
 > Repo is for our team's HuggingFace Graphio/MCP hackathon submission.
+
+Visit the setup guide [here](setup.md) to get started.
