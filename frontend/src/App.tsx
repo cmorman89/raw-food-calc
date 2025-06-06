@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { methods } from "./assets/methods";
 import { DataView } from "./components/DataView";
+import { calculateDogFood, type CalculationResult } from "./lib/calculator";
 // import { products } from "./assets/products";
 import "./App.css";
 
@@ -10,13 +11,32 @@ function App() {
     method: "",
     age: "",
     unit: "imperial",
+    percentage: 2.5,
   });
+
+  const [result, setResult] = useState<CalculationResult | null>(null);
 
   type ChangeEvent =
     | React.ChangeEvent<HTMLInputElement>
     | React.ChangeEvent<HTMLSelectElement>;
   const handleChange = (e: ChangeEvent) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCalculate = () => {
+    try {
+      const calculationResult = calculateDogFood({
+        weight: Number(formData.weight),
+        method: formData.method,
+        age: formData.age,
+        unit: formData.unit as "imperial" | "metric",
+        percentage: Number(formData.percentage),
+      });
+      setResult(calculationResult);
+    } catch (error) {
+      console.error("Calculation error:", error);
+      // You might want to show an error message to the user here
+    }
   };
 
   const getMethodNames = () => Object.keys(methods);
@@ -49,8 +69,9 @@ function App() {
           onChange={handleChange}
           className="input"
         >
+          <option value="">Select age</option>
           {getAgeNames().map((age) => (
-            <option key={age} value={age.toLowerCase()}>
+            <option key={age} value={age}>
               {age}
             </option>
           ))}
@@ -66,12 +87,29 @@ function App() {
           onChange={handleChange}
           className="input"
         >
+          <option value="">Select method</option>
           {getMethodNames().map((method) => (
             <option key={method} value={method}>
               {method}
             </option>
           ))}
         </select>
+      </div>
+      <div className="input-group">
+        <label htmlFor="percentage" className="text-sm">
+          Food percentage of body weight
+        </label>
+        <input
+          type="number"
+          name="percentage"
+          placeholder="Percentage (e.g., 2.5)"
+          value={formData.percentage}
+          onChange={handleChange}
+          className="input"
+          step="0.1"
+          min="1"
+          max="10"
+        />
       </div>
       <div className="input-group">
         <label htmlFor="unit" className="text-sm">
@@ -87,7 +125,21 @@ function App() {
           <option value="metric">Kilograms (kg)</option>
         </select>
       </div>
-      <DataView />
+      <button
+        onClick={handleCalculate}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        disabled={!formData.weight || !formData.method || !formData.age}
+      >
+        Calculate
+      </button>
+      <DataView 
+        result={result} 
+        unit={formData.unit}
+        weight={Number(formData.weight)}
+        method={formData.method}
+        age={formData.age}
+        percentage={Number(formData.percentage)}
+      />
     </div>
   );
 }
