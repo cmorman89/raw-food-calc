@@ -1,16 +1,18 @@
 # Setting Up the Repo
 
-## Create the Frontend (First Time Only)
+## Clone the Repo
 
 ```bash
-npm create vite@latest frontend --template react-ts
+git clone https://github.com/cmorman89/raw-food-calc
 ```
 
 > [!NOTE]
-> Select "React" and "TypeScript" if prompted.
+> Select "React" and "TypeScript" if prompted. -->
 
 ```bash
-cd frontend && npm install
+cd raw-food-calc
+cd frontend
+npm install
 ```
 
 > [!NOTE]
@@ -35,7 +37,7 @@ npm run dev
 
 ---
 
-## Build the Frontend 
+## Build the Frontend (Only on deploy)
 
 ```bash
 npm run build
