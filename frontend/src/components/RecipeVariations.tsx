@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import type { CalculationResult } from '../lib/calculator';
-import Cookies from 'js-cookie';
+import { useState, useEffect } from "react";
+import type { CalculationResult } from "../lib/calculator";
+import Cookies from "js-cookie";
 
 type RecipeVariationsProps = {
   result: CalculationResult;
@@ -36,20 +36,25 @@ type SavedFavorite = {
   name: string;
 };
 
-export const RecipeVariations = ({ result, selectedProducts, unit, convertWeight }: RecipeVariationsProps) => {
+export const RecipeVariations = ({
+  result,
+  selectedProducts,
+  unit,
+  convertWeight,
+}: RecipeVariationsProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
   const [favorites, setFavorites] = useState<SavedFavorite[]>([]);
 
   useEffect(() => {
     // Load favorites from cookies
-    const savedFavorites = Cookies.get('recipeFavorites');
+    const savedFavorites = Cookies.get("recipeFavorites");
     if (savedFavorites) {
       try {
         const parsedFavorites = JSON.parse(savedFavorites);
         setFavorites(parsedFavorites);
       } catch (e) {
-        console.error('Error parsing saved favorites:', e);
+        console.error("Error parsing saved favorites:", e);
         setFavorites([]);
       }
     }
@@ -64,69 +69,77 @@ export const RecipeVariations = ({ result, selectedProducts, unit, convertWeight
     const seenRecipes = new Set<string>();
 
     // Group products by their composition type
-    selectedProducts.forEach(product => {
+    selectedProducts.forEach((product) => {
       const { composition } = product;
       if (composition.meat > 0) {
-        const products = componentProducts.get('MuscleMeat') || [];
-        componentProducts.set('MuscleMeat', [...products, product]);
+        const products = componentProducts.get("MuscleMeat") || [];
+        componentProducts.set("MuscleMeat", [...products, product]);
       }
       if (composition.bone > 0) {
-        const products = componentProducts.get('BoneyMeat') || [];
-        componentProducts.set('BoneyMeat', [...products, product]);
+        const products = componentProducts.get("BoneyMeat") || [];
+        componentProducts.set("BoneyMeat", [...products, product]);
       }
       if (composition.organ > 0) {
-        const products = componentProducts.get('OrganMeat') || [];
-        componentProducts.set('OrganMeat', [...products, product]);
+        const products = componentProducts.get("OrganMeat") || [];
+        componentProducts.set("OrganMeat", [...products, product]);
       }
     });
 
     // Generate variations for each component
-    const generateVariations = (componentName: string, products: typeof selectedProducts, count: number = 5) => {
+    const generateVariations = (
+      componentName: string,
+      products: typeof selectedProducts,
+      count: number = 5
+    ) => {
       const variations: Recipe[] = [];
-      const componentPercentage = result.breakdown.find(b => b.name === componentName)?.percentage || 0;
+      const componentPercentage =
+        result.breakdown.find((b) => b.name === componentName)?.percentage || 0;
       const componentAmount = result.totalAmount * (componentPercentage / 100);
 
       // Try different combinations of products
       for (let i = 0; i < count; i++) {
         const recipe: Recipe = {};
         const availableProducts = [...products];
-        
+
         // Randomly select products for this component
         while (availableProducts.length > 0 && !recipe[componentName]) {
-          const randomIndex = Math.floor(Math.random() * availableProducts.length);
+          const randomIndex = Math.floor(
+            Math.random() * availableProducts.length
+          );
           const product = availableProducts[randomIndex];
-          
+
           // Calculate the actual contribution of this product to the component
           let contributionPercentage = 0;
           switch (componentName) {
-            case 'MuscleMeat':
+            case "MuscleMeat":
               contributionPercentage = product.composition.meat;
               break;
-            case 'BoneyMeat':
+            case "BoneyMeat":
               contributionPercentage = product.composition.bone;
               break;
-            case 'OrganMeat':
+            case "OrganMeat":
               contributionPercentage = product.composition.organ;
               break;
           }
 
           // Calculate the adjusted weight based on the product's contribution
-          const adjustedWeight = (componentAmount * 100) / contributionPercentage;
+          const adjustedWeight =
+            (componentAmount * 100) / contributionPercentage;
 
           recipe[componentName] = {
             name: product.name,
             weight: adjustedWeight,
             percentage: componentPercentage,
-            composition: product.composition
+            composition: product.composition,
           };
           availableProducts.splice(randomIndex, 1);
         }
-        
+
         if (Object.keys(recipe).length > 0) {
           variations.push(recipe);
         }
       }
-      
+
       return variations;
     };
 
@@ -138,15 +151,15 @@ export const RecipeVariations = ({ result, selectedProducts, unit, convertWeight
       } else {
         // Combine with existing variations
         const newVariations: Recipe[] = [];
-        variations.forEach(variation => {
-          componentVariations.forEach(componentVariation => {
+        variations.forEach((variation) => {
+          componentVariations.forEach((componentVariation) => {
             const newVariation = { ...variation, ...componentVariation };
             // Create a unique key for this recipe
             const recipeKey = Object.entries(newVariation)
               .map(([comp, details]) => `${comp}:${details.name}`)
               .sort()
-              .join('|');
-            
+              .join("|");
+
             // Only add if we haven't seen this combination before
             if (!seenRecipes.has(recipeKey)) {
               seenRecipes.add(recipeKey);
@@ -166,7 +179,9 @@ export const RecipeVariations = ({ result, selectedProducts, unit, convertWeight
   };
 
   const prevRecipe = () => {
-    setCurrentRecipeIndex((prev) => (prev - 1 + recipes.length) % recipes.length);
+    setCurrentRecipeIndex(
+      (prev) => (prev - 1 + recipes.length) % recipes.length
+    );
   };
 
   const toggleFavorite = () => {
@@ -175,153 +190,143 @@ export const RecipeVariations = ({ result, selectedProducts, unit, convertWeight
     const newFavorite: SavedFavorite = {
       recipe: currentRecipe,
       date: new Date().toISOString(),
-      name: recipeName
+      name: recipeName,
     };
 
-    const newFavorites = favorites.some(f => 
-      JSON.stringify(f.recipe) === JSON.stringify(currentRecipe)
+    const newFavorites = favorites.some(
+      (f) => JSON.stringify(f.recipe) === JSON.stringify(currentRecipe)
     )
-      ? favorites.filter(f => JSON.stringify(f.recipe) !== JSON.stringify(currentRecipe))
+      ? favorites.filter(
+          (f) => JSON.stringify(f.recipe) !== JSON.stringify(currentRecipe)
+        )
       : [...favorites, newFavorite];
 
     setFavorites(newFavorites);
-    Cookies.set('recipeFavorites', JSON.stringify(newFavorites), { expires: 365 });
+    Cookies.set("recipeFavorites", JSON.stringify(newFavorites), {
+      expires: 365,
+    });
   };
 
   const removeFavorite = (favorite: SavedFavorite) => {
-    const newFavorites = favorites.filter(f => f !== favorite);
+    const newFavorites = favorites.filter((f) => f !== favorite);
     setFavorites(newFavorites);
-    Cookies.set('recipeFavorites', JSON.stringify(newFavorites), { expires: 365 });
+    Cookies.set("recipeFavorites", JSON.stringify(newFavorites), {
+      expires: 365,
+    });
   };
 
   const isCurrentRecipeFavorite = () => {
-    return favorites.some(f => 
-      JSON.stringify(f.recipe) === JSON.stringify(recipes[currentRecipeIndex])
+    return favorites.some(
+      (f) =>
+        JSON.stringify(f.recipe) === JSON.stringify(recipes[currentRecipeIndex])
     );
   };
 
   const renderRecipe = (recipe: Recipe) => {
-    if (!recipe) return null;
-    
     return (
-      <div className="space-y-4">
-        {Object.entries(recipe).map(([componentName, details]) => {
-          const composition = details.composition;
-          const totalPercentage = composition.meat + composition.bone + composition.organ;
-          
-          // Calculate the actual contribution to each component
-          const meatContribution = (details.weight * composition.meat) / 100;
-          const boneContribution = (details.weight * composition.bone) / 100;
-          const organContribution = (details.weight * composition.organ) / 100;
-
-          return (
-            <div key={componentName} className="border-b pb-2">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+          Recipe Details
+        </h3>
+        <div className="space-y-4">
+          {Object.entries(recipe).map(([componentName, details]) => (
+            <div
+              key={componentName}
+              className="border-b border-gray-200 dark:border-gray-700 pb-4"
+            >
               <div className="flex justify-between items-center">
-                <span className="font-medium">{componentName}</span>
-                <span>
-                  {convertWeight(details.weight)} {unit === "imperial" ? "oz" : "kg"} ({details.percentage}%)
+                <span className="font-medium text-gray-900 dark:text-white">
+                  {componentName}
+                </span>
+                <span className="text-gray-800 dark:text-gray-200">
+                  {convertWeight(details.weight)} ({details.percentage}%)
                 </span>
               </div>
-              <div className="mt-1 text-sm text-gray-600">
-                <div>Product: {details.name}</div>
-                <div className="mt-1">
-                  Composition Breakdown:
-                  {composition.meat > 0 && (
-                    <div className="ml-2">
-                      • Muscle Meat: {convertWeight(meatContribution)} {unit === "imperial" ? "oz" : "kg"} ({composition.meat}%)
-                    </div>
-                  )}
-                  {composition.bone > 0 && (
-                    <div className="ml-2">
-                      • Bone: {convertWeight(boneContribution)} {unit === "imperial" ? "oz" : "kg"} ({composition.bone}%)
-                    </div>
-                  )}
-                  {composition.organ > 0 && (
-                    <div className="ml-2">
-                      • Organ: {convertWeight(organContribution)} {unit === "imperial" ? "oz" : "kg"} ({composition.organ}%)
-                    </div>
-                  )}
-                </div>
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                <p>Product: {details.name}</p>
+                <p>Composition:</p>
+                <ul className="list-disc pl-4">
+                  <li>Meat: {details.composition.meat}%</li>
+                  <li>Bone: {details.composition.bone}%</li>
+                  <li>Organ: {details.composition.organ}%</li>
+                </ul>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     );
   };
 
-  // If there are no recipes and no favorites, don't render anything
-  if (recipes.length === 0 && favorites.length === 0) {
+  if (recipes.length === 0) {
     return null;
   }
 
   return (
-    <div className="space-y-8">
-      {/* Recipe Variations Section */}
-      {recipes.length > 0 && (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">Recipe Variations</h2>
-            <button
-              onClick={toggleFavorite}
-              className={`px-4 py-2 rounded ${
-                isCurrentRecipeFavorite() ? 'bg-yellow-400 hover:bg-yellow-500' : 'bg-gray-200 hover:bg-gray-300'
-              }`}
-            >
-              {isCurrentRecipeFavorite() ? '★ Favorited' : '☆ Add to Favorites'}
-            </button>
-          </div>
-
-          <div className="flex justify-between items-center mb-4">
-            <button
-              onClick={prevRecipe}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-            >
-              Previous
-            </button>
-            <span className="text-lg">
-              Recipe {currentRecipeIndex + 1} of {recipes.length}
-            </span>
-            <button
-              onClick={nextRecipe}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-            >
-              Next
-            </button>
-          </div>
-          {renderRecipe(recipes[currentRecipeIndex])}
+    <div className="mb-8">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Recipe Variations
+        </h2>
+        <div className="flex gap-2">
+          <button
+            onClick={prevRecipe}
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
+            Previous
+          </button>
+          <button
+            onClick={nextRecipe}
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
+            Next
+          </button>
+          <button
+            onClick={toggleFavorite}
+            className={`px-4 py-2 rounded transition-colors ${
+              isCurrentRecipeFavorite()
+                ? "bg-yellow-500 dark:bg-yellow-600 hover:bg-yellow-600 dark:hover:bg-yellow-700 text-white"
+                : "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200"
+            }`}
+          >
+            {isCurrentRecipeFavorite() ? "★ Favorited" : "☆ Favorite"}
+          </button>
         </div>
-      )}
+      </div>
 
-      {/* Favorites Section */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-bold mb-4">Saved Favorites</h2>
-        {favorites.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">No favorite recipes saved yet.</p>
-        ) : (
-          <div className="space-y-6">
+      {renderRecipe(recipes[currentRecipeIndex])}
+
+      {favorites.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+            Saved Favorites
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {favorites.map((favorite, index) => (
-              <div key={index} className="border rounded-lg p-4">
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold">{favorite.name}</h3>
-                    <p className="text-sm text-gray-500">
-                      Saved on {new Date(favorite.date).toLocaleDateString()}
-                    </p>
-                  </div>
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow p-4"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="font-medium text-gray-900 dark:text-white">
+                    {favorite.name}
+                  </h4>
                   <button
                     onClick={() => removeFavorite(favorite)}
-                    className="px-3 py-1 text-red-600 hover:bg-red-50 rounded"
+                    className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300"
                   >
-                    Remove
+                    ×
                   </button>
                 </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Saved on {new Date(favorite.date).toLocaleDateString()}
+                </p>
                 {renderRecipe(favorite.recipe)}
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
-}; 
+};

@@ -1,9 +1,8 @@
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap";
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
 :root {
-  @apply bg-neutral-200 text-gray-900;
-  /* @apply dark:bg-neutral-950 dark:text-white; */
+  @apply bg-neutral-200 text-gray-900 dark:bg-neutral-950 dark:text-white;
 
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -16,13 +15,18 @@
 }
 
 .input-group {
-  @apply flex flex-col border-1 border-gray-400 rounded-lg px-6 py-4 gap-2 shadow-md w-full max-w-md bg-neutral-100;
+  @apply flex flex-col border-1 border-gray-400 dark:border-gray-700 rounded-lg px-6 py-4 gap-2 shadow-md w-full max-w-md bg-neutral-100 dark:bg-neutral-900 transition-colors;
 }
 
 .input {
-  @apply border-1 border-gray-500/50 text-sm text-gray-800 rounded-md p-2 w-full outline-none bg-gray-200/50;
+  @apply border-1 border-gray-500/50 dark:border-gray-600/50 text-sm text-gray-800 dark:text-gray-200 rounded-md p-2 w-full outline-none bg-gray-200/50 dark:bg-gray-800/50 transition-colors;
 }
 
 .input-group label {
-  @apply text-sm text-gray-700;
+  @apply text-sm text-gray-700 dark:text-gray-300 transition-colors;
+}
+
+/* Add smooth transitions for theme changes */
+* {
+  @apply transition-colors duration-200;
 }
