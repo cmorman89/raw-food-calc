@@ -26,7 +26,32 @@
   @apply text-sm text-gray-700 dark:text-gray-300 transition-colors;
 }
 
-/* Add smooth transitions for theme changes */
+
 * {
   @apply transition-colors duration-200;
+}
+
+.styledScrollbar {
+  /* Scrollbar track */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Scrollbar handle */
+  &::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 dark:bg-gray-600 m-1;
+    border-radius: 4px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500 dark:bg-gray-500 m-1;
+  }
+
+  /* Scrollbar track */
+  &::-webkit-scrollbar-track {
+    @apply bg-gray-200 dark:bg-gray-800 m-1 ;
+    border-radius: 4px;
+  }
 }

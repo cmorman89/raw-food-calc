@@ -3,7 +3,7 @@ import { FoodTable } from "./FoodTable";
 import { RecipeVariations } from "./RecipeVariations";
 import type { CalculationResult } from "../lib/calculator";
 import { useState, useEffect } from "react";
-import { calculateDogFood } from "../lib/calculator";
+import { parseComponentName } from "../lib/stringUtils";
 
 type DataViewProps = {
   result: CalculationResult | null;
@@ -152,7 +152,7 @@ export const DataView = ({
                   >
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-gray-900 dark:text-white">
-                        {component.name}
+                        {parseComponentName(component.name)}
                       </span>
                       <span className="text-gray-800 dark:text-gray-200">
                         {convertWeight(component.amount)} (
@@ -209,7 +209,7 @@ export const DataView = ({
             </button>
           )}
         </div>
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-2 w-full h-full">
           {Object.keys(products).map((product: string) => (
             <div
               key={product}
@@ -227,7 +227,7 @@ export const DataView = ({
                 </span>
               </button>
               {expandedCategories[product] && (
-                <div className="p-4 pt-0">
+                <div className="flex flex-col p-4 pt-0 h-full">
                   <FoodTable
                     key={product}
                     foodItem={products[product]}

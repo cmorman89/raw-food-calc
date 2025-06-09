@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { CalculationResult } from "../lib/calculator";
 import Cookies from "js-cookie";
+import { parseComponentName } from "../lib/stringUtils";
 
 type RecipeVariationsProps = {
   result: CalculationResult;
@@ -222,6 +223,8 @@ export const RecipeVariations = ({
     );
   };
 
+
+
   const renderRecipe = (recipe: Recipe) => {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -236,20 +239,31 @@ export const RecipeVariations = ({
             >
               <div className="flex justify-between items-center">
                 <span className="font-medium text-gray-900 dark:text-white">
-                  {componentName}
+                  {parseComponentName(componentName)}
                 </span>
                 <span className="text-gray-800 dark:text-gray-200">
                   {convertWeight(details.weight)} ({details.percentage}%)
                 </span>
               </div>
-              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                <p>Product: {details.name}</p>
-                <p>Composition:</p>
-                <ul className="list-disc pl-4">
-                  <li>Meat: {details.composition.meat}%</li>
-                  <li>Bone: {details.composition.bone}%</li>
-                  <li>Organ: {details.composition.organ}%</li>
-                </ul>
+              <div className="mt-2 text-sm text-gray-600 dark:text-gray-400 text-left flex justify-center items-center gap-2 ">
+                  <p>{details.name}</p>
+                  <p className="text-xs opacity-50 flex border rounded-full px-2 py-1 items-center gap-2 bg-gray-100 dark:bg-gray-700">
+                    {componentName === "MuscleMeat" && (
+                      <span>
+                        Meat: {details.composition.meat}%
+                      </span>
+                    )}
+                    {componentName === "BoneyMeat" && (
+                      <span>
+                        Bone: {details.composition.bone}%
+                      </span>
+                    )}
+                    {componentName === "OrganMeat" && (
+                      <span>
+                        Organ: {details.composition.organ}%
+                      </span>
+                  )}
+                </p>  
               </div>
             </div>
           ))}

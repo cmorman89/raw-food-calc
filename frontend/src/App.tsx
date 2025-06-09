@@ -5,6 +5,7 @@ import { calculateDogFood, type CalculationResult } from "./lib/calculator";
 import { ThemeToggle } from "./components/ThemeToggle";
 // import { products } from "./assets/products";
 import "./App.css";
+import { CompositionBar } from "./components/CompositionBar";
 
 function App() {
   const [formData, setFormData] = useState({
